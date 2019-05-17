@@ -1,0 +1,222 @@
+package model;
+
+import database.DBConnect;
+
+import database.OpenConnection;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import java.util.Collections;
+import java.util.Vector;
+
+public class Schedule {
+
+    private int scheduleNumber;
+    private Course course;
+    private Slot slot1;
+    private Slot slot2;
+    private Slot slot3;
+    private Slot slot4;
+    private Slot tutSlot;
+    private Slot labSlot;
+    private ClassRoom room1;
+    private ClassRoom room2;
+    private ClassRoom room3;
+    private ClassRoom room4;
+    private ClassRoom tutRoom;
+    private ClassRoom labRoom;
+    private Schedule scheduleObject;
+
+    public Schedule() {
+        this.scheduleObject = this;
+    }
+
+    public Schedule(Vector<Slot> slots, Vector<ClassRoom> rooms) {
+
+        this.slot1 = slots.get(0);
+        this.slot2 = slots.get(1);
+        this.slot3 = slots.get(2);
+        this.slot4 = slots.get(3);
+        this.tutSlot = slots.get(4);
+        this.labSlot = slots.get(5);
+
+        this.room1 = rooms.get(0);
+        this.room2 = rooms.get(1);
+        this.room3 = rooms.get(2);
+        this.room4 = rooms.get(3);
+        this.tutRoom = rooms.get(4);
+        this.labRoom = rooms.get(5);
+    }
+
+    public Schedule(int scheduleNumber) {
+        setScheduleObject(new Schedule());
+        String query = "SELECT * FROM SCHEDULETBL WHERE SCHDNUM='" + scheduleNumber + "'";
+        ResultSet rs = null;
+        try {
+            rs = OpenConnection.db.query(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        try {
+            while (rs.next()) {
+                getScheduleObject().setScheduleNumber(rs.getInt("SCHDNUM"));
+
+                getScheduleObject().setSlot1(new Slot(rs.getInt("SLOT1")));
+                getScheduleObject().setSlot2(new Slot(rs.getInt("SLOT2")));
+                getScheduleObject().setSlot3(new Slot(rs.getInt("SLOT3")));
+                getScheduleObject().setSlot4(new Slot(rs.getInt("SLOT4")));
+
+                getScheduleObject().setRoom1(new ClassRoom(rs.getInt("ROOM1")));
+                getScheduleObject().setRoom2(new ClassRoom(rs.getInt("ROOM2")));
+                getScheduleObject().setRoom3(new ClassRoom(rs.getInt("ROOM3")));
+                getScheduleObject().setRoom4(new ClassRoom(rs.getInt("ROOM4")));
+
+                getScheduleObject().setTutSlot(new Slot(rs.getInt("TUTSLOT")));
+                getScheduleObject().setLabSlot(new Slot(rs.getInt("LABSLOT")));
+                getScheduleObject().setTutRoom(new ClassRoom(rs.getInt("ROOM5")));
+                getScheduleObject().setLabRoom(new ClassRoom(rs.getInt("ROOM6")));
+            }
+        } catch (SQLException e2) {
+            e2.printStackTrace();
+        }
+
+    }
+
+    public void setScheduleNumber(int scheduleNumber) {
+        this.scheduleNumber = scheduleNumber;
+    }
+
+    public int getScheduleNumber() {
+        return scheduleNumber;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setScheduleObject(Schedule scheduleObject) {
+        this.scheduleObject = scheduleObject;
+    }
+
+    public Schedule getScheduleObject() {
+        return scheduleObject;
+    }
+
+    public void setTutSlot(Slot tutSlot) {
+        this.tutSlot = tutSlot;
+    }
+
+    public Slot getTutSlot() {
+        return tutSlot;
+    }
+
+    public void setLabSlot(Slot labSlot) {
+        this.labSlot = labSlot;
+    }
+
+    public Slot getLabSlot() {
+        return labSlot;
+    }
+
+    public void setTutRoom(ClassRoom tutRoom) {
+        this.tutRoom = tutRoom;
+    }
+
+    public ClassRoom getTutRoom() {
+        return tutRoom;
+    }
+
+    public void setLabRoom(ClassRoom labRoom) {
+        this.labRoom = labRoom;
+    }
+
+    public ClassRoom getLabRoom() {
+        return labRoom;
+    }
+
+    public void setSlot1(Slot slot1) {
+        this.slot1 = slot1;
+    }
+
+    public Slot getSlot1() {
+        return slot1;
+    }
+
+    public void setSlot2(Slot slot2) {
+        this.slot2 = slot2;
+    }
+
+    public Slot getSlot2() {
+        return slot2;
+    }
+
+    public void setSlot3(Slot slot3) {
+        this.slot3 = slot3;
+    }
+
+    public Slot getSlot3() {
+        return slot3;
+    }
+
+    public void setSlot4(Slot slot4) {
+        this.slot4 = slot4;
+    }
+
+    public Slot getSlot4() {
+        return slot4;
+    }
+
+    public void setRoom1(ClassRoom room1) {
+        this.room1 = room1;
+    }
+
+    public ClassRoom getRoom1() {
+        return room1;
+    }
+
+    public void setRoom2(ClassRoom room2) {
+        this.room2 = room2;
+    }
+
+    public ClassRoom getRoom2() {
+        return room2;
+    }
+
+    public void setRoom3(ClassRoom room3) {
+        this.room3 = room3;
+    }
+
+    public ClassRoom getRoom3() {
+        return room3;
+    }
+
+    public void setRoom4(ClassRoom room4) {
+        this.room4 = room4;
+    }
+
+    public ClassRoom getRoom4() {
+        return room4;
+    }
+
+    public String addSchedule(int schdlNum) {
+        String returnValue = "";
+        String query =
+            "INSERT INTO SCHEDULETBL (SCHDNUM, SLOT1, SLOT2, SLOT3, SLOT4, TUTSLOT, LABSLOT, ROOM1, ROOM2, ROOM3, ROOM4, ROOM5, ROOM6) VALUES (" +schdlNum+ ", " + getSlot1().getSlotNumber() + ", " +
+            getSlot2().getSlotNumber() + ", " + getSlot3().getSlotNumber() + ", " + getSlot4().getSlotNumber() + ", " + getTutSlot().getSlotNumber() + ", " + getLabSlot().getSlotNumber() + ", " + getRoom1().getRoomNumber() + ", " + getRoom2().getRoomNumber() + ", " + getRoom3().getRoomNumber() + ", " +
+            getRoom4().getRoomNumber() + ", " + getTutRoom().getRoomNumber() + ", " + getLabRoom().getRoomNumber() + ")";
+        System.out.println("SCHEDULETBL: "+query);
+        try {
+            OpenConnection.db.update(query);
+            returnValue = "Schedule successfully added";
+        } catch (SQLException e1) {
+            e1.printStackTrace();
+            returnValue = "Schedule entry failed. Error: " + e1.getMessage() + ". Error Code: " + e1.getErrorCode();
+        }
+        return returnValue;
+    }
+}
